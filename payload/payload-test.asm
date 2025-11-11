@@ -11,10 +11,10 @@ DEFAULT ABS
 
 start:
 	lea rsi, [rel message]		; Load RSI with the relative memory address of string
-	mov ecx, 20			; Output 13 characters
+	mov ecx, 25			; Output 25 characters
 	call [b_output]			; Output the string that RSI points to
 halt:
 	hlt
 	jmp halt
 
-message: db 'Replace this payload', 0
+message: db 'Replace this test payload', 0
