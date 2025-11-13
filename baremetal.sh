@@ -162,8 +162,6 @@ function baremetal_build {
 	build_dir "src/BareMetal"
 	echo "OK"
 
-
-
 	cd "$OUTPUT_DIR"
 
 	# Remove extra files
