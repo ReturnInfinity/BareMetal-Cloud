@@ -97,10 +97,10 @@ function baremetal_setup {
 
 	cd src/BareMetal
 	if [[ "$(uname)" == "Darwin" ]]; then
-		sed -i '' 's/BUILDFLAGS=""/BUILDFLAGS="-dNO_LFB -dNO_XHCI -dNO_I8259X -dNO_I8257X -dNO_I8254X -dNO_ATA -dNO_AHCI"/' build.sh
+		sed -i '' 's/^BUILDFLAGS=.*/BUILDFLAGS="-dNO_LFB -dNO_XHCI -dNO_I8259X -dNO_I8257X -dNO_I8254X -dNO_NVME -dNO_AHCI"/' build.sh
 		sed -i '' 's/KERNELSIZE equ 20/KERNELSIZE equ 12/' src/kernel.asm
 	else
-		sed -i 's/BUILDFLAGS=""/BUILDFLAGS="-dNO_LFB -dNO_XHCI -dNO_I8259X -dNO_I8257X -dNO_I8254X -dNO_ATA -dNO_AHCI"/' build.sh
+		sed -i 's/^BUILDFLAGS=.*/BUILDFLAGS="-dNO_LFB -dNO_XHCI -dNO_I8259X -dNO_I8257X -dNO_I8254X -dNO_NVME -dNO_AHCI"/' build.sh
 		sed -i 's/KERNELSIZE equ 20/KERNELSIZE equ 12/' src/kernel.asm
 	fi
 	cd ../..
@@ -240,7 +240,8 @@ function baremetal_help {
 	echo "build    - Build source code"
 	echo "install  - Install binary to disk image"
 	echo "run      - Run the OS via QEMU"
-	echo "vmdk     - Generate VMDK disk image for VMware"
+	echo "vmdk     - Generate cloud VMDK disk image"
+	echo "vendor   - Select vendor for disk image"
 	echo "bnr      - Build 'n Run"
 }
 
@@ -256,6 +257,44 @@ function baremetal_sys_check {
 		echo "Files are missing. Please run './baremetal.sh setup' first."
 		exit 1
 	fi
+}
+
+function baremetal_vendor {
+	cd src/BareMetal
+	if [ $# -eq 0 ]; then
+		echo "Insufficent agruments - Select a cloud vendor with the correct argument:"
+#		echo "aws - Amazon Web Services"
+		echo "do  - Digital Ocean"
+		echo "gcp - Google Cloud"
+		exit 1
+#	elif [ "$1" == "aws" ]; then
+#		if [[ "$(uname)" == "Darwin" ]]; then
+#			sed -i '' 's/^BUILDFLAGS=.*/BUILDFLAGS="-dNO_LFB -dNO_VIRTIO -dNO_XHCI -dNO_I8259X -dNO_I8257X -dNO_I8254X -dNO_AHCI"/' build.sh
+#			sed -i '' 's/KERNELSIZE equ 20/KERNELSIZE equ 12/' src/kernel.asm
+#		else
+#			sed -i 's/^BUILDFLAGS=.*/BUILDFLAGS="-dNO_LFB -dNO_VIRTIO -dNO_XHCI -dNO_I8259X -dNO_I8257X -dNO_I8254X -dNO_AHCI"/' build.sh
+#			sed -i 's/KERNELSIZE equ 20/KERNELSIZE equ 12/' src/kernel.asm
+#		fi
+	elif [ "$1" == "do" ]; then
+		if [[ "$(uname)" == "Darwin" ]]; then
+			sed -i '' 's/^BUILDFLAGS=.*/BUILDFLAGS="-dNO_LFB -dNO_XHCI -dNO_I8259X -dNO_I8257X -dNO_I8254X -dNO_NVME -dNO_AHCI"/' build.sh
+			sed -i '' 's/KERNELSIZE equ 20/KERNELSIZE equ 12/' src/kernel.asm
+		else
+			sed -i 's/^BUILDFLAGS=.*/BUILDFLAGS="-dNO_LFB -dNO_XHCI -dNO_I8259X -dNO_I8257X -dNO_I8254X -dNO_NVME -dNO_AHCI"/' build.sh
+			sed -i 's/KERNELSIZE equ 20/KERNELSIZE equ 12/' src/kernel.asm
+		fi
+	elif [ "$1" == "gcp" ]; then
+		if [[ "$(uname)" == "Darwin" ]]; then
+			sed -i '' 's/^BUILDFLAGS=.*/BUILDFLAGS="-dNO_LFB -dNO_VGA -dNO_XHCI -dNO_I8259X -dNO_I8257X -dNO_I8254X -dNO_NVME -dNO_AHCI"/' build.sh
+			sed -i '' 's/KERNELSIZE equ 20/KERNELSIZE equ 12/' src/kernel.asm
+		else
+			sed -i 's/^BUILDFLAGS=.*/BUILDFLAGS="-dNO_LFB -dNO_VGA -dNO_XHCI -dNO_I8259X -dNO_I8257X -dNO_I8254X -dNO_NVME -dNO_AHCI"/' build.sh
+			sed -i 's/KERNELSIZE equ 20/KERNELSIZE equ 12/' src/kernel.asm
+		fi
+	fi
+	cd ../..
+	baremetal_build
+	baremetal_install
 }
 
 if [ $# -eq 0 ]; then
@@ -279,6 +318,8 @@ elif [ $# -eq 1 ]; then
 		baremetal_vmdk
 	elif [ "$1" == "bnr" ]; then
 		baremetal_bnr
+	elif [ "$1" == "vendor" ]; then
+		baremetal_vendor
 	else
 		echo "Invalid argument '$1'"
 	fi
@@ -289,5 +330,7 @@ elif [ $# -eq 2 ]; then
 		baremetal_install $2
 	elif [ "$1" == "setup" ]; then
 		baremetal_setup $2
+	elif [ "$1" == "vendor" ]; then
+		baremetal_vendor $2
 	fi
 fi
