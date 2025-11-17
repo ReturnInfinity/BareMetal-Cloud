@@ -3,7 +3,7 @@
 set +e
 export EXEC_DIR="$PWD"
 export OUTPUT_DIR="$EXEC_DIR/sys"
-DISK_SIZE=128
+DISK_SIZE=32
 
 cmd=( qemu-system-x86_64
 	-machine q35 #,hpet=off
@@ -25,11 +25,11 @@ cmd=( qemu-system-x86_64
 	-drive id=disk0,file="sys/baremetal_cloud.img",if=none,format=raw
 # NVMe
 	-device nvme,serial=12345678,drive=disk0
-# VIRTIO-Block
-#	-device virtio-blk,drive=disk0 #,disable-legacy=on,disable-modern=false
 # VIRTIO-SCSI
 #	-device virtio-scsi-pci #,disable-legacy=on,disable-modern=false
 #	-device scsi-hd,drive=disk0
+# VIRTIO-Block
+#	-device virtio-blk,drive=disk0 #,disable-legacy=on,disable-modern=false
 
 # Serial configuration
 # Output serial to console and log file
@@ -62,7 +62,7 @@ function baremetal_clean {
 }
 
 function baremetal_setup {
-	echo -e "BareMetal Cloud Setup\n==================="
+	echo -e "BareMetal Cloud Setup\n======================"
 	baremetal_clean
 
 	mkdir src
@@ -239,7 +239,7 @@ function baremetal_help {
 	echo "update   - Pull in the latest code"
 	echo "build    - Build source code"
 	echo "install  - Install binary to disk image"
-	echo "run      - Run the OS via QEMU"
+	echo "run      - Run the unikernel via QEMU"
 	echo "vmdk     - Generate cloud VMDK disk image"
 	echo "vendor   - Select vendor for disk image"
 	echo "bnr      - Build 'n Run"
