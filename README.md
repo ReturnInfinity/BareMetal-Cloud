@@ -68,13 +68,15 @@ Use a utility like `scp` to copy the .vmdk file to the filesystem of the Proxmox
 
 ### 3) Import the disk
 
-	`qm importdisk <VMID> <vmdk_filename> <storage_location>`
+`qm importdisk <VMID> <vmdk_filename> <storage_location>`
 
 Example - `qm importdisk 101 /root/BareMetal_Cloud.vmdk local-lvm --format raw`
 
 ### 4) Attach the new disk
 
 In the Proxmox web interface select the new VM. In the Hardware section, find the new unused disk, and attach it to the VM.
+
+Verify the "Boot Order" in the VM "Options".
 
 ### 5) Start the VM
 
