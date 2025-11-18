@@ -1,7 +1,7 @@
 # BareMetal-Cloud
 
 > [!IMPORTANT]
-> This has only been tested against Digital Ocean. AWS and Google Cloud support is coming soon.
+> This has only been tested with Digital Ocean and Proxmox. Support for other hypervisor/cloud providers (AWS, Azure, and Google Cloud) is coming soon.
 
 BareMetal Cloud is a minimal version of the [BareMetal](https://github.com/ReturnInfinity/BareMetal) exokernel specifically geared for running in cloud instances.
 
@@ -44,6 +44,39 @@ Create a VMDK disk image
 In Digital Ocean click on `Backups & Snapshots` and then `Custom Images`. Click on the `Upload Image` button and select the .vmdk file on your filesystem. Once the file is uploaded you can start a droplet of it by clicking on the `More` dropdown and selecting `Start a droplet`.
 
 On the `Create Droplets` page you can select the Droplet Type and CPU Options. Give the droplet a name and click on `Create Droplet`.
+
+## Proxmox
+
+### 1) Create a new VM
+
+In Proxmox click on the "Create VM" button. Configure the following settings:
+
+- General - Give the VM a name
+- OS - "Do not use any media"
+- System - Machine: q35
+- Disks - Remove the existing disk
+- CPU - Provision as needed
+- Memory - Provision as needed
+- Network - Model: VirtIO
+- Confirm - Click "Finish"
+
+### 2) Copy the .vmdk file
+
+Use a utility like `scp` to copy the .vmdk file to the filesystem of the Proxmox server.
+
+### 3) Import the disk
+
+	`qm importdisk <VMID> <vmdk_filename> <storage_location>`
+
+Example - `qm importdisk 101 /root/BareMetal_Cloud.vmdk local-lvm --format raw`
+
+### 4) Attach the new disk
+
+In the Proxmox web interface select the new VM. In the Hardware section, find the new unused disk, and attach it to the VM.
+
+### 5) Start the VM
+
+Click "Start" on the VM.
 
 
 //EOF
