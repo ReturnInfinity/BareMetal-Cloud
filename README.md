@@ -35,11 +35,13 @@ This command will run BareMetal-Cloud in a QEMU VM. Output to the serial port wi
 
 # Running in the Cloud
 
-## Digital Ocean
-
 Create a VMDK disk image
 
 	./baremetal.sh vmdk
+
+The resulting `BareMetal_Cloud.vmdk` in `sys/` will be required.
+
+## Digital Ocean
 
 In Digital Ocean click on `Backups & Snapshots` and then `Custom Images`. Click on the `Upload Image` button and select the .vmdk file on your filesystem. Once the file is uploaded you can start a droplet of it by clicking on the `More` dropdown and selecting `Start a droplet`.
 
