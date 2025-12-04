@@ -3,7 +3,7 @@
 > [!IMPORTANT]
 > This has only been tested with Digital Ocean and Proxmox. Support for other hypervisor/cloud providers (AWS, Azure, and Google Cloud) is coming soon.
 
-BareMetal Cloud is a minimal version of the [BareMetal](https://github.com/ReturnInfinity/BareMetal) exokernel specifically geared for running in public/private cloud instances.
+BareMetal Cloud is a minimal version of the [BareMetal](https://github.com/ReturnInfinity/BareMetal) exokernel specifically geared for running in public/private cloud instances. This minimal version of BareMetal that contains only the relevant drivers is 10,240 bytes in size and uses 4 MiB of memory. All other memory is allocated to the payload.
 
 # Getting Started
 
