@@ -7,9 +7,35 @@ BareMetal Cloud is a minimal version of the [BareMetal](https://github.com/Retur
 
 An instance of BareMetal is running in Digital Ocean at http://baremetal.returninfinity.com and will respond to HTTP and ICMP.
 
-# Getting Started
 
-## Initial configuration
+## Prerequisites
+
+The script in this repo depends on a Debian-based Linux system. macOS is also supported to build and test if you are using [Homebrew](https://brew.sh).
+
+- [NASM](https://nasm.us) - Assembler to build the loader and kernel.
+- [QEMU](https://www.qemu.org) - Computer emulator if you plan on running a virtual machine for quick testing.
+- [Git](https://git-scm.com) - Version control software for pulling the source code from GitHub.
+
+In Linux this can be completed with the following command:
+
+	sudo apt install nasm qemu-system-x86 git
+
+In macOS via Homebrew this can be completed with the following command:
+
+	brew install nasm qemu git
+
+ 
+## Components
+
+BareMetal Cloud consists of two different projects:
+
+- [Pure64](https://github.com/ReturnInfinity/Pure64) - The software loader.
+- [BareMetal](https://github.com/ReturnInfinity/BareMetal) - The kernel.
+
+
+## Getting Started
+
+### Initial configuration
 
 	git clone https://github.com/ReturnInfinity/BareMetal-Cloud.git
 	cd BareMetal-Cloud
@@ -17,25 +43,25 @@ An instance of BareMetal is running in Digital Ocean at http://baremetal.returni
 
 `baremetal.sh setup` automatically runs the build and install functions. Once the setup is complete you can execute `baremetal.sh run` to verify that everything installed correctly.
 
-## Building
+### Building
 
 	./baremetal.sh build
 
 This command builds the boot sector, loader (Pure64), and kernel
 
-## Installing
+### Installing
 
 	./baremetal.sh install
 
 This command installs the software to the disk image.
 
-## Running
+### Running
 
 	./baremetal.sh run
 
 This command will run BareMetal-Cloud in a QEMU VM. Output to the serial port will be displayed to the console.
 
-# Running in the Cloud
+## Running in the Cloud
 
 Create a VMDK disk image
 
@@ -43,15 +69,15 @@ Create a VMDK disk image
 
 The resulting `BareMetal_Cloud.vmdk` in `sys/` will be required.
 
-## Digital Ocean
+### Digital Ocean
 
 In Digital Ocean click on `Backups & Snapshots` and then `Custom Images`. Click on the `Upload Image` button and select the .vmdk file on your filesystem. Once the file is uploaded you can start a droplet of it by clicking on the `More` dropdown and selecting `Start a droplet`.
 
 On the `Create Droplets` page you can select the Droplet Type and CPU Options. Give the droplet a name and click on `Create Droplet`.
 
-## Proxmox
+### Proxmox
 
-### 1) Create a new VM
+#### 1) Create a new VM
 
 In Proxmox click on the "Create VM" button. Configure the following settings:
 
@@ -64,23 +90,23 @@ In Proxmox click on the "Create VM" button. Configure the following settings:
 - Network - Model: VirtIO
 - Confirm - Click "Finish"
 
-### 2) Copy the .vmdk file
+#### 2) Copy the .vmdk file
 
 Use a utility like `scp` to copy the .vmdk file to the filesystem of the Proxmox server.
 
-### 3) Import the disk
+#### 3) Import the disk
 
 `qm importdisk <VMID> <vmdk_filename> <storage_location>`
 
 Example - `qm importdisk 101 /root/BareMetal_Cloud.vmdk local-lvm --format raw`
 
-### 4) Attach the new disk
+#### 4) Attach the new disk
 
 In the Proxmox web interface select the new VM. In the Hardware section, find the new unused disk, and attach it to the VM.
 
 Verify the "Boot Order" in the VM "Options".
 
-### 5) Start the VM
+#### 5) Start the VM
 
 Click "Start" on the VM.
 
