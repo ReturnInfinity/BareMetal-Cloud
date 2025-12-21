@@ -82,23 +82,13 @@ function baremetal_setup {
 
 	echo -n "Pulling code from GitHub"
 
-	if [ "$1" = "dev" ]; then
-		echo -n " (Dev Env)... "
-		setup_args=" -q"
-	else
-		echo -n "... "
-		setup_args=" -q --depth 1"
-	fi
-
+	git_args=" -q"
+	git_ver="2025.10"
 	cd src
-	git clone https://github.com/ReturnInfinity/Pure64.git $setup_args
-	git clone https://github.com/ReturnInfinity/BareMetal.git $setup_args
-	cd Pure64
-	git checkout 2025.10 -q
-	cd ..
-	cd BareMetal
-	git checkout 2025.10 -q
-	cd ..
+	git clone https://github.com/ReturnInfinity/Pure64.git $git_args
+	git clone https://github.com/ReturnInfinity/BareMetal.git $git_args
+	cd Pure64;git checkout $git_ver -q;cd ..
+	cd BareMetal;git checkout $git_ver -q;cd ..
 	cd ..
 	echo "OK"
 
