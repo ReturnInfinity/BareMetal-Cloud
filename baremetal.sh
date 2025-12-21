@@ -87,8 +87,8 @@ function baremetal_setup {
 	cd src
 	git clone https://github.com/ReturnInfinity/Pure64.git $git_args
 	git clone https://github.com/ReturnInfinity/BareMetal.git $git_args
-	cd Pure64;git checkout $git_ver -q;cd ..
-	cd BareMetal;git checkout $git_ver -q;cd ..
+#	cd Pure64;git checkout $git_ver -q;cd ..
+#	cd BareMetal;git checkout $git_ver -q;cd ..
 	cd ..
 	echo "OK"
 
