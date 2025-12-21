@@ -18,7 +18,8 @@ cmd=( qemu-system-x86_64
 	-m 256 # Value is in Megabytes
 
 # Network configuration.
-	-netdev socket,id=testnet1,listen=:1234
+	-netdev socket,id=testnet1,listen=:12345
+#	-netdev socket,id=testnet1,connect=localhost:12345
 	-device virtio-net-pci,netdev=testnet1,mac=10:11:12:00:1A:F4 #,disable-legacy=on,disable-modern=false
 
 # Disk configuration. Use one controller.
@@ -92,6 +93,12 @@ function baremetal_setup {
 	cd src
 	git clone https://github.com/ReturnInfinity/Pure64.git $setup_args
 	git clone https://github.com/ReturnInfinity/BareMetal.git $setup_args
+	cp Pure64
+	git checkout 2025.10
+	cd ..
+	cd BareMetal
+	git checkout 2025.10
+	cd ..
 	cd ..
 	echo "OK"
 
