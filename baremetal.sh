@@ -93,11 +93,11 @@ function baremetal_setup {
 	cd src
 	git clone https://github.com/ReturnInfinity/Pure64.git $setup_args
 	git clone https://github.com/ReturnInfinity/BareMetal.git $setup_args
-	cp Pure64
-	git checkout 2025.10
+	cd Pure64
+	git checkout 2025.10 -q
 	cd ..
 	cd BareMetal
-	git checkout 2025.10
+	git checkout 2025.10 -q
 	cd ..
 	cd ..
 	echo "OK"
