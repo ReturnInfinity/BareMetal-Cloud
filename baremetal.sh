@@ -92,14 +92,16 @@ function baremetal_setup {
 	cd ..
 	echo "OK"
 
+	# Compute flag for sed
+	case "$(uname)" in
+		Darwin) SED_INPLACE=(-i '') ;;
+		*)      SED_INPLACE=(-i) ;;
+	esac
+
+	# Update source
 	cd src/BareMetal
-	if [[ "$(uname)" == "Darwin" ]]; then
-		sed -i '' 's/^BUILDFLAGS=.*/BUILDFLAGS="-dNO_LFB -dNO_XHCI -dNO_I8259X -dNO_I8257X -dNO_I8254X -dNO_NVME -dNO_AHCI"/' build.sh
-		sed -i '' 's/^KERNELSIZE.*/KERNELSIZE equ 10 * 1024/' src/kernel.asm
-	else
-		sed -i 's/^BUILDFLAGS=.*/BUILDFLAGS="-dNO_LFB -dNO_XHCI -dNO_I8259X -dNO_I8257X -dNO_I8254X -dNO_NVME -dNO_AHCI"/' build.sh
-		sed -i 's/^KERNELSIZE.*/KERNELSIZE equ 10 * 1024/' src/kernel.asm
-	fi
+	sed "${SED_INPLACE[@]}" 's/^BUILDFLAGS=.*/BUILDFLAGS="-dNO_LFB -dNO_XHCI -dNO_I8259X -dNO_I8257X -dNO_I8254X -dNO_NVME -dNO_AHCI"/' build.sh
+	sed "${SED_INPLACE[@]}" 's/^KERNELSIZE.*/KERNELSIZE equ 10 * 1024/' src/kernel.asm
 	cd ../..
 
 	init_imgs $DISK_SIZE

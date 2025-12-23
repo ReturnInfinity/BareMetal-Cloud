@@ -98,7 +98,7 @@ Use a utility like `scp` to copy the .vmdk file to the filesystem of the Proxmox
 
 `qm importdisk <VMID> <vmdk_filename> <storage_location>`
 
-Example - `qm importdisk 101 /root/BareMetal_Cloud.vmdk local-lvm --format raw`
+Example - `qm importdisk 101 /root/BareMetal_Cloud.vmdk local-lvm`
 
 #### 4) Attach the new disk
 
