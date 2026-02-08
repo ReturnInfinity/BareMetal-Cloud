@@ -94,7 +94,7 @@ In Proxmox click on the "Create VM" button. Configure the following settings:
 
 Use a utility like `scp` to copy the .vmdk file to the filesystem of the Proxmox server.
 
-`scp sys/BareMetal-Cloud.vmdk root@PROXMOX_IP:/root/`
+`scp sys/BareMetal_Cloud.vmdk root@PROXMOX_IP:/root/`
 
 #### 3) Import the disk
 
