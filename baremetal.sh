@@ -181,7 +181,7 @@ function baremetal_install {
 
 	# Inject a program binary into to the kernel (ORG 0x001E0000)
 	cat pure64-bios.sys kernel.sys payload.bin > software-bios.sys
-	
+
 	softwaresize=$(wc -c <software-bios.sys)
 	if [ $softwaresize -gt 32768 ]; then
 		echo "Warning - BIOS binary is larger than 32768 bytes!"
@@ -223,6 +223,11 @@ function baremetal_vmdk {
 	qemu-img convert -O vmdk "$OUTPUT_DIR/baremetal_cloud.img" "$OUTPUT_DIR/BareMetal_Cloud.vmdk"
 }
 
+function baremetal_qcow2 {
+	baremetal_vmdk
+	echo "Creating QCOW2 image..."
+	qemu-img convert -f vmdk -O qcow2 "$OUTPUT_DIR/BareMetal_Cloud.vmdk" "$OUTPUT_DIR/BareMetal_Cloud.qcow2"
+}
 
 function baremetal_bnr {
 	baremetal_build
@@ -240,6 +245,7 @@ function baremetal_help {
 	echo "install  - Install binary to disk image"
 	echo "run      - Run the unikernel via QEMU"
 	echo "vmdk     - Generate cloud VMDK disk image"
+	echo "qcow2    - Generate cloud QCOW2 disk image"
 	echo "vendor   - Select vendor for disk image"
 	echo "bnr      - Build 'n Run"
 }
@@ -313,6 +319,8 @@ elif [ $# -eq 1 ]; then
 		baremetal_help
 	elif [ "$1" == "run" ]; then
 		baremetal_run
+	elif [ "$1" == "qcow2" ]; then
+		baremetal_qcow2
 	elif [ "$1" == "vmdk" ]; then
 		baremetal_vmdk
 	elif [ "$1" == "bnr" ]; then
